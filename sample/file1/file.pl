@@ -20,7 +20,7 @@ my $fhr = IO::File->new("< file.txt");
 # ファイルがない（開けなかった）場合、ファイルハンドルは未定義(defined()がfalseになる)
 if (defined($fhr)){
 	print <$fhr>;
-	# → ばらしたもの
+	# 1行単位で出す場合
 	# while (<$fhr>) {
 	# 	print $_;
 	# }
