@@ -36,14 +36,9 @@ my $book = $excel->Workbooks->Add;
 # $book->RemoveDocumentInformation(xlRDIDocumentProperties);
 # $book->RemoveDocumentInformation(xlRDIRemovePersonalInformation);
 
-# 手動で消す
-$book->{Title}="";
-$book->{Subject}="";
-$book->{Author}="";
-$book->{Keywords}="";
-$book->{Comments}="";
-$book->BuiltInDocumentProperties('Last Author')->{Value}="";
-$book->BuiltInDocumentProperties('Company')->{Value}="";
+# 保存時に削除するように設定する
+$book->{RemovePersonalInformation}="True";
+
 
 # sheetを作成する
 my $sheet = $book->Worksheets(1);
