@@ -30,12 +30,20 @@ $excel->{DisplayAlerts} = 'False';
 $excel->{SheetsInNewWorkbook} = 1;
 my $book = $excel->Workbooks->Add;
 
-# 作った段階で付与される余計なものを調整
+# 作った段階で付与される余計なものを調整(Office2007以降)
 # xlRDIPrinterPath,xlRDIDocumentProperties,xlRDIRemovePersonalInformationをRemoveDocumentInformationで削除
-$book->RemoveDocumentInformation(xlRDIPrinterPath);
-$book->RemoveDocumentInformation(xlRDIDocumentProperties);
-$book->RemoveDocumentInformation(xlRDIRemovePersonalInformation);
+# $book->RemoveDocumentInformation(xlRDIPrinterPath);
+# $book->RemoveDocumentInformation(xlRDIDocumentProperties);
+# $book->RemoveDocumentInformation(xlRDIRemovePersonalInformation);
 
+# 手動で消す
+$book->{Title}="";
+$book->{Subject}="";
+$book->{Author}="";
+$book->{Keywords}="";
+$book->{Comments}="";
+$book->BuiltInDocumentProperties('Last Author')->{Value}="";
+$book->BuiltInDocumentProperties('Company')->{Value}="";
 
 # sheetを作成する
 my $sheet = $book->Worksheets(1);
@@ -50,7 +58,9 @@ $sheet->Cells(1,1)->{Value} = $value;
 
 
 # 保存してclose（2003以前の形式:xlExcel8(=56) で保存）
-$book->SaveAs({Filename => "$ExcelFileName", Fileformat => 56});
+# インストールしているOfficeが2003以前なら2000-9795形式（xlExcel9795(=43)）にする
+# $book->SaveAs({Filename => "$ExcelFileName", Fileformat => 56});
+$book->SaveAs({Filename => "$ExcelFileName", Fileformat => 43});
 $book->Close();
 
 # Excelの終了
