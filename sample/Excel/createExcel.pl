@@ -17,6 +17,7 @@ if ($@) {
 }
 
 # Excelの起動
+# ただし、実行するExcelのバージョンは2007を想定
 my $excel = Win32::OLE->GetActiveObject('Excel.Application') || Win32::OLE->new('Excel.Application', 'Quit');
 if (!defined($excel)) {
 	die "Excelが起動できません";
@@ -40,7 +41,7 @@ $book->RemoveDocumentInformation(xlRDIRemovePersonalInformation);
 my $sheet = $book->Worksheets(1);
 my $ExcelFileName = 'c:\test.xls';
 
-# このスクリプトがutf8で書かれているので、Excelに出す場合はShiftJIS(CP932)に変換する必要有
+# utf8でベタに文字を書いているので、Excelに出す場合はShiftJIS(CP932)に変換する必要有
 my $value = "て～すと①";
 Encode::from_to($value, "utf8", "CP932");
 
@@ -48,7 +49,7 @@ Encode::from_to($value, "utf8", "CP932");
 $sheet->Cells(1,1)->{Value} = $value;
 
 
-# 保存してclose
+# 保存してclose（2003以前の形式:xlExcel8(=56) で保存）
 $book->SaveAs({Filename => "$ExcelFileName", Fileformat => 56});
 $book->Close();
 
